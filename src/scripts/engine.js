@@ -16,20 +16,31 @@ const state = {
   },
 };
 
+let bgAudio;
+
+function playBackgroundMusic() {
+  bgAudio = new Audio("./src/audios/background.m4a");
+  bgAudio.loop = true;
+  bgAudio.volume = 0.1;
+  bgAudio.play().catch(() => {});
+}
+
 function randomSquare() {
   state.view.squares.forEach((square) => {
     square.classList.remove("enemy", "enemy-anim");
   });
 
-  let randomNumber = Math.floor(Math.random() * 9);
-  let randomSquare = state.view.squares[randomNumber];
-  void randomSquare.offsetWidth;
-  randomSquare.classList.add("enemy", "enemy-anim");
-  state.values.hitPosition = randomSquare.id;
+  const randomNumber = Math.floor(Math.random() * state.view.squares.length);
+  const square = state.view.squares[randomNumber];
+  state.values.hitPosition = square.id;
+
+  requestAnimationFrame(() => {
+    square.classList.add("enemy", "enemy-anim");
+  });
 }
 
 function playSound(audioName) {
-  let audio = new Audio(`./src/audios/${audioName}.m4a`);
+  const audio = new Audio(`./src/audios/${audioName}.m4a`);
   audio.volume = 0.1;
   audio.play();
 }
@@ -43,9 +54,7 @@ function addListenerHitbox() {
         state.values.hitPosition = null;
         playSound("hit");
         square.classList.add("enemy-hit");
-        setTimeout(() => {
-          square.classList.remove("enemy-hit");
-        }, 200);
+        setTimeout(() => square.classList.remove("enemy-hit"), 200);
       }
     });
   });
@@ -58,11 +67,17 @@ function countDown() {
   if (state.values.currentTime <= 0) {
     clearInterval(state.actions.countDownTimerId);
     clearInterval(state.actions.timerId);
+
+    if (bgAudio) {
+      bgAudio.pause();
+      bgAudio.currentTime = 0;
+    }
+
     playSound("gameover");
+
     setTimeout(() => {
       alert("Game Over! Seu resultado foi: " + state.values.result);
-      const playAgain = confirm("Deseja jogar novamente?");
-      if (playAgain) {
+      if (confirm("Deseja jogar novamente?")) {
         restartGame();
       }
     }, 500);
@@ -81,12 +96,14 @@ function restartGame() {
 
   state.actions.timerId = setInterval(randomSquare, state.values.gameVelocity);
   state.actions.countDownTimerId = setInterval(countDown, 1000);
+  playBackgroundMusic();
 }
 
 function initialize() {
   addListenerHitbox();
   state.actions.timerId = setInterval(randomSquare, state.values.gameVelocity);
   state.actions.countDownTimerId = setInterval(countDown, 1000);
+  playBackgroundMusic();
 }
 
 initialize();
