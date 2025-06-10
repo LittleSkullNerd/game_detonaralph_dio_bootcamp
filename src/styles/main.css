@@ -64,6 +64,25 @@
   background-size: cover;
 }
 
+.enemy-anim {
+  animation: enemy-pop 0.3s ease;
+}
+
+@keyframes enemy-pop {
+  0% {
+    transform: scale(0.5) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2) rotate(10deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
 .menu-lives {
   display: flex;
   align-items: center;

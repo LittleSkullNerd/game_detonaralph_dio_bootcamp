@@ -1,7 +1,6 @@
 const state = {
   view: {
     squares: document.querySelectorAll(".square"),
-    enemy: document.querySelector(".enemy"),
     timeLeft: document.querySelector("#time-left"),
     score: document.querySelector("#score"),
   },
@@ -19,12 +18,16 @@ const state = {
 
 function randomSquare() {
   state.view.squares.forEach((square) => {
-    square.classList.remove("enemy");
+    square.classList.remove("enemy", "enemy-anim");
   });
 
   let randomNumber = Math.floor(Math.random() * 9);
   let randomSquare = state.view.squares[randomNumber];
-  randomSquare.classList.add("enemy");
+
+  // Força reflow para reiniciar a animação
+  void randomSquare.offsetWidth;
+
+  randomSquare.classList.add("enemy", "enemy-anim");
   state.values.hitPosition = randomSquare.id;
 }
 
@@ -74,7 +77,7 @@ function restartGame() {
   state.view.timeLeft.textContent = 60;
 
   state.view.squares.forEach((square) => {
-    square.classList.remove("enemy");
+    square.classList.remove("enemy", "enemy-anim");
   });
 
   state.actions.timerId = setInterval(randomSquare, state.values.gameVelocity);
