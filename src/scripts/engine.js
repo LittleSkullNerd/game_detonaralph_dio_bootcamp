@@ -23,10 +23,7 @@ function randomSquare() {
 
   let randomNumber = Math.floor(Math.random() * 9);
   let randomSquare = state.view.squares[randomNumber];
-
-  // Força reflow para reiniciar a animação
   void randomSquare.offsetWidth;
-
   randomSquare.classList.add("enemy", "enemy-anim");
   state.values.hitPosition = randomSquare.id;
 }
@@ -45,6 +42,10 @@ function addListenerHitbox() {
         state.view.score.textContent = state.values.result;
         state.values.hitPosition = null;
         playSound("hit");
+        square.classList.add("enemy-hit");
+        setTimeout(() => {
+          square.classList.remove("enemy-hit");
+        }, 200);
       }
     });
   });
@@ -57,9 +58,7 @@ function countDown() {
   if (state.values.currentTime <= 0) {
     clearInterval(state.actions.countDownTimerId);
     clearInterval(state.actions.timerId);
-
     playSound("gameover");
-
     setTimeout(() => {
       alert("Game Over! Seu resultado foi: " + state.values.result);
       const playAgain = confirm("Deseja jogar novamente?");
@@ -77,7 +76,7 @@ function restartGame() {
   state.view.timeLeft.textContent = 60;
 
   state.view.squares.forEach((square) => {
-    square.classList.remove("enemy", "enemy-anim");
+    square.classList.remove("enemy", "enemy-anim", "enemy-hit");
   });
 
   state.actions.timerId = setInterval(randomSquare, state.values.gameVelocity);

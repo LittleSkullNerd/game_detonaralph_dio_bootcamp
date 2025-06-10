@@ -83,6 +83,28 @@
   }
 }
 
+.enemy-hit {
+  animation: hit-shake 0.2s ease;
+}
+
+@keyframes hit-shake {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(-3px, 0) scale(1.05);
+  }
+  50% {
+    transform: translate(3px, 0) scale(1.05);
+  }
+  75% {
+    transform: translate(-2px, 0) scale(1.05);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+}
+
 .menu-lives {
   display: flex;
   align-items: center;
