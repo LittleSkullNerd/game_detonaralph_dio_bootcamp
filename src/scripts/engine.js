@@ -16,15 +16,6 @@ const state = {
   },
 };
 
-let bgAudio;
-
-function playBackgroundMusic() {
-  bgAudio = new Audio("./src/audios/background.m4a");
-  bgAudio.loop = true;
-  bgAudio.volume = 0.1;
-  bgAudio.play().catch(() => {});
-}
-
 function randomSquare() {
   state.view.squares.forEach((square) => {
     square.classList.remove("enemy", "enemy-anim");
@@ -68,11 +59,6 @@ function countDown() {
     clearInterval(state.actions.countDownTimerId);
     clearInterval(state.actions.timerId);
 
-    if (bgAudio) {
-      bgAudio.pause();
-      bgAudio.currentTime = 0;
-    }
-
     playSound("gameover");
 
     setTimeout(() => {
@@ -96,14 +82,12 @@ function restartGame() {
 
   state.actions.timerId = setInterval(randomSquare, state.values.gameVelocity);
   state.actions.countDownTimerId = setInterval(countDown, 1000);
-  playBackgroundMusic();
 }
 
 function initialize() {
   addListenerHitbox();
   state.actions.timerId = setInterval(randomSquare, state.values.gameVelocity);
   state.actions.countDownTimerId = setInterval(countDown, 1000);
-  playBackgroundMusic();
 }
 
 initialize();
